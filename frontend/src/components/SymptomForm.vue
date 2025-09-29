@@ -34,7 +34,7 @@
     <div class="form-header">
       <h2>🫀 Heart Disease Risk Assessment</h2>
       <p class="form-description">
-        Step {{ currentStep }} of {{ totalSteps }}: {{ steps[currentStep - 1].description }}
+        Step {{ currentStep }} of {{ totalSteps }}: {{ steps[currentStep - 1]?.description || 'Loading...' }}
       </p>
     </div>
 
@@ -123,8 +123,8 @@
 
           <!-- BMI Widget -->
           <BMIWidget 
-            :height="formData.height_m" 
-            :weight="formData.weight_kg"
+            :height="formData.height_m || 0" 
+            :weight="formData.weight_kg || 0"
             @update="updateBMI"
           />
         </div>
@@ -148,9 +148,9 @@
               @change="validateField('chestPain')"
             >
               <option value="">Select Type</option>
-              <option value="typical">Typical Angina</option>
-              <option value="atypical">Atypical Angina</option>
-              <option value="non-anginal">Non-Anginal Pain</option>
+              <option value="typical-angina">Typical Angina</option>
+              <option value="atypical-angina">Atypical Angina</option>
+              <option value="non-anginal-pain">Non-Anginal Pain</option>
               <option value="asymptomatic">Asymptomatic</option>
             </select>
             <div v-if="errors.chestPain" class="text-red-500 text-sm mt-1">{{ errors.chestPain }}</div>
@@ -198,14 +198,14 @@
               <label for="fastingBS" class="block text-sm font-medium text-gray-700 mb-2">Fasting Blood Sugar *</label>
               <select 
                 id="fastingBS" 
-                v-model="formData.fastingBS" 
+                v-model.number="formData.fastingBS" 
                 class="input"
                 :class="{ 'border-red-500': errors.fastingBS }"
                 @change="validateField('fastingBS')"
               >
                 <option value="">Select Level</option>
-                <option value="normal">Normal (≤ 120 mg/dl)</option>
-                <option value="high">High (> 120 mg/dl)</option>
+                <option :value="0">Normal (≤ 120 mg/dl)</option>
+                <option :value="1">High (> 120 mg/dl)</option>
               </select>
               <div v-if="errors.fastingBS" class="text-red-500 text-sm mt-1">{{ errors.fastingBS }}</div>
               <div class="text-gray-500 text-sm mt-1">Fasting blood sugar level</div>
@@ -222,8 +222,8 @@
               >
                 <option value="">Select Result</option>
                 <option value="normal">Normal</option>
-                <option value="stt">ST-T Wave Abnormality</option>
-                <option value="lvh">Left Ventricular Hypertrophy</option>
+                <option value="st-t-abnormality">ST-T Wave Abnormality</option>
+                <option value="left-ventricular-hypertrophy">Left Ventricular Hypertrophy</option>
               </select>
               <div v-if="errors.restECG" class="text-red-500 text-sm mt-1">{{ errors.restECG }}</div>
               <div class="text-gray-500 text-sm mt-1">Resting electrocardiographic results</div>
@@ -306,8 +306,8 @@
               >
                 <option value="">Select Result</option>
                 <option value="normal">Normal</option>
-                <option value="fixed">Fixed Defect</option>
-                <option value="reversible">Reversible Defect</option>
+                <option value="fixed-defect">Fixed Defect</option>
+                <option value="reversible-defect">Reversible Defect</option>
               </select>
               <div v-if="errors.thallium" class="text-red-500 text-sm mt-1">{{ errors.thallium }}</div>
               <div class="text-gray-500 text-sm mt-1">Thallium stress test results</div>
@@ -330,19 +330,19 @@
               <div class="review-grid">
                 <div class="review-item">
                   <span class="review-label">Age:</span>
-                  <span class="review-value">{{ formData.age }} years</span>
+                  <span class="review-value">{{ formData.age || 0 }} years</span>
                 </div>
                 <div class="review-item">
                   <span class="review-label">Gender:</span>
-                  <span class="review-value">{{ formData.sex === 'M' ? 'Male' : 'Female' }}</span>
+                  <span class="review-value">{{ formData.sex === 'male' ? 'Male' : 'Female' }}</span>
                 </div>
                 <div class="review-item">
                   <span class="review-label">Height:</span>
-                  <span class="review-value">{{ formData.height_m }} m</span>
+                  <span class="review-value">{{ formData.height_m || 0 }} m</span>
                 </div>
                 <div class="review-item">
                   <span class="review-label">Weight:</span>
-                  <span class="review-value">{{ formData.weight_kg }} kg</span>
+                  <span class="review-value">{{ formData.weight_kg || 0 }} kg</span>
                 </div>
               </div>
             </div>
@@ -352,23 +352,23 @@
               <div class="review-grid">
                 <div class="review-item">
                   <span class="review-label">Chest Pain:</span>
-                  <span class="review-value">{{ formatChestPain(formData.chestPain) }}</span>
+                  <span class="review-value">{{ formatChestPain(formData.chestPain || '') }}</span>
                 </div>
                 <div class="review-item">
                   <span class="review-label">Blood Pressure:</span>
-                  <span class="review-value">{{ formData.bloodPressure }} mmHg</span>
+                  <span class="review-value">{{ formData.bloodPressure || 0 }} mmHg</span>
                 </div>
                 <div class="review-item">
                   <span class="review-label">Cholesterol:</span>
-                  <span class="review-value">{{ formData.cholesterol }} mg/dl</span>
+                  <span class="review-value">{{ formData.cholesterol || 0 }} mg/dl</span>
                 </div>
                 <div class="review-item">
                   <span class="review-label">Fasting Blood Sugar:</span>
-                  <span class="review-value">{{ formData.fastingBS === 'normal' ? 'Normal' : 'High' }}</span>
+                  <span class="review-value">{{ formData.fastingBS === 0 ? 'Normal' : 'High' }}</span>
                 </div>
                 <div class="review-item">
                   <span class="review-label">Resting ECG:</span>
-                  <span class="review-value">{{ formatECG(formData.restECG) }}</span>
+                  <span class="review-value">{{ formatECG(formData.restECG || '') }}</span>
                 </div>
               </div>
             </div>
@@ -378,7 +378,7 @@
               <div class="review-grid">
                 <div class="review-item">
                   <span class="review-label">Max Heart Rate:</span>
-                  <span class="review-value">{{ formData.maxHeartRate }} bpm</span>
+                  <span class="review-value">{{ formData.maxHeartRate || 0 }} bpm</span>
                 </div>
                 <div class="review-item">
                   <span class="review-label">Exercise Angina:</span>
@@ -386,11 +386,11 @@
                 </div>
                 <div class="review-item">
                   <span class="review-label">ST Depression:</span>
-                  <span class="review-value">{{ formData.oldpeak }}</span>
+                  <span class="review-value">{{ formData.oldpeak || 0 }}</span>
                 </div>
                 <div class="review-item">
                   <span class="review-label">Thallium Test:</span>
-                  <span class="review-value">{{ formatThallium(formData.thallium) }}</span>
+                  <span class="review-value">{{ formatThallium(formData.thallium || '') }}</span>
                 </div>
               </div>
             </div>
@@ -486,16 +486,16 @@ const steps = [
 
 const formData = reactive<Partial<SymptomInput>>({
   age: undefined,
-  sex: '',
-  chestPain: '',
+  sex: undefined,
+  chestPain: undefined,
   bloodPressure: undefined,
   cholesterol: undefined,
-  fastingBS: '',
-  restECG: '',
+  fastingBS: undefined,
+  restECG: undefined,
   maxHeartRate: undefined,
-  exerciseAngina: '',
+  exerciseAngina: undefined,
   oldpeak: undefined,
-  thallium: '',
+  thallium: undefined,
   height_m: undefined,
   weight_kg: undefined
 })
@@ -536,8 +536,9 @@ const validationRules = {
     if (value < 100 || value > 600) return 'Cholesterol must be between 100 and 600 mg/dl'
     return ''
   },
-  fastingBS: (value: string) => {
-    if (!value) return 'Fasting blood sugar is required'
+  fastingBS: (value: number) => {
+    if (value === null || value === undefined) return 'Fasting blood sugar is required'
+    if (value !== 0 && value !== 1) return 'Invalid fasting blood sugar value'
     return ''
   },
   restECG: (value: string) => {
@@ -586,7 +587,7 @@ const validateAllFields = () => {
 
 const isFormValid = computed(() => {
   return Object.keys(errors).length === 0 && 
-         Object.values(formData).every(value => value !== '' && value !== null && value !== undefined)
+         Object.values(formData).every(value => value !== null && value !== undefined)
 })
 
 const getStepFields = (step: number) => {
@@ -606,7 +607,7 @@ const isCurrentStepValid = computed(() => {
   const stepFields = getStepFields(currentStep.value)
   return stepFields.every(field => {
     const value = formData[field as keyof SymptomInput]
-    return value !== '' && value !== null && value !== undefined && !errors[field]
+    return value !== null && value !== undefined && !errors[field]
   })
 })
 
@@ -659,9 +660,9 @@ const setLoading = (loading: boolean) => {
 // Format functions for review step
 const formatChestPain = (value: string) => {
   const map: Record<string, string> = {
-    'typical': 'Typical Angina',
-    'atypical': 'Atypical Angina',
-    'non-anginal': 'Non-Anginal Pain',
+    'typical-angina': 'Typical Angina',
+    'atypical-angina': 'Atypical Angina',
+    'non-anginal-pain': 'Non-Anginal Pain',
     'asymptomatic': 'Asymptomatic'
   }
   return map[value] || value
@@ -670,8 +671,8 @@ const formatChestPain = (value: string) => {
 const formatECG = (value: string) => {
   const map: Record<string, string> = {
     'normal': 'Normal',
-    'stt': 'ST-T Wave Abnormality',
-    'lvh': 'Left Ventricular Hypertrophy'
+    'st-t-abnormality': 'ST-T Wave Abnormality',
+    'left-ventricular-hypertrophy': 'Left Ventricular Hypertrophy'
   }
   return map[value] || value
 }
@@ -679,8 +680,8 @@ const formatECG = (value: string) => {
 const formatThallium = (value: string) => {
   const map: Record<string, string> = {
     'normal': 'Normal',
-    'fixed': 'Fixed Defect',
-    'reversible': 'Reversible Defect'
+    'fixed-defect': 'Fixed Defect',
+    'reversible-defect': 'Reversible Defect'
   }
   return map[value] || value
 }

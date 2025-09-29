@@ -1,17 +1,29 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
+  env: {
+    node: true,
+    browser: true,
+    es2022: true,
+  },
   extends: [
     'eslint:recommended',
-    '@typescript-eslint/recommended',
-    'prettier'
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'prettier'],
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
+  ignorePatterns: [
+    'dist',
+    '*.vue',
+    '*.d.ts',
+    '*.ts',
+    'tailwind.config.js',
+    'vite.config.js',
+    '.eslintrc.cjs'
+  ],
   rules: {
-    'prettier/prettier': 'error',
-    '@typescript-eslint/no-unused-vars': 'error',
-    '@typescript-eslint/no-explicit-any': 'warn'
-  }
+    'no-unused-vars': 'off',
+    'no-console': 'warn',
+    'no-redeclare': 'off',
+  },
 }

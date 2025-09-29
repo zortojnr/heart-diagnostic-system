@@ -1,15 +1,20 @@
 import { defineStore } from 'pinia'
 import { ref, readonly } from 'vue'
-import { 
-  collection, 
-  addDoc, 
-  query, 
-  where, 
-  orderBy, 
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  orderBy,
   getDocs,
-  serverTimestamp 
+  serverTimestamp,
 } from 'firebase/firestore'
-import type { DiagnosisResult, SymptomInput, DiagnosisRecord, Patient } from '../types'
+import type {
+  DiagnosisResult,
+  SymptomInput,
+  DiagnosisRecord,
+  Patient,
+} from '../types'
 import { db } from '../firebase'
 import { useAuthStore } from './auth'
 
@@ -22,9 +27,12 @@ export const useDiagnosisStore = defineStore('diagnosis', () => {
   const authStore = useAuthStore()
   // Using imported db from firebase.ts instead of creating a new instance
 
-  const diagnosticServiceUrl = import.meta.env.VITE_DIAGNOSTIC_SERVICE_URL || 'http://localhost:8080'
+  const diagnosticServiceUrl =
+    import.meta.env.VITE_DIAGNOSTIC_SERVICE_URL || 'http://localhost:8080'
 
-  const submitDiagnosis = async (symptomInput: SymptomInput): Promise<DiagnosisResult> => {
+  const submitDiagnosis = async (
+    symptomInput: SymptomInput
+  ): Promise<DiagnosisResult> => {
     try {
       loading.value = true
       error.value = null
@@ -35,7 +43,7 @@ export const useDiagnosisStore = defineStore('diagnosis', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(symptomInput)
+        body: JSON.stringify(symptomInput),
       })
 
       if (!response.ok) {
@@ -52,17 +60,17 @@ export const useDiagnosisStore = defineStore('diagnosis', () => {
           inputPayload: symptomInput,
           modelResult: result,
           performedBy: authStore.user.uid,
-          createdAt: new Date()
+          createdAt: new Date(),
         }
 
         const docRef = await addDoc(collection(db, 'diagnoses'), {
           ...diagnosisRecord,
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
         })
 
         const savedRecord: DiagnosisRecord = {
           id: docRef.id,
-          ...diagnosisRecord
+          ...diagnosisRecord,
         }
 
         diagnoses.value.unshift(savedRecord)
@@ -84,14 +92,17 @@ export const useDiagnosisStore = defineStore('diagnosis', () => {
     }
   }
 
-  const createEmergencyAlert = async (diagnosisId: string, patientId: string) => {
+  const createEmergencyAlert = async (
+    diagnosisId: string,
+    patientId: string
+  ) => {
     try {
       await addDoc(collection(db, 'emergencies'), {
         diagnosisId,
         patientId,
         severity: 'severe',
         timestamp: serverTimestamp(),
-        acknowledged: false
+        acknowledged: false,
       })
     } catch (err) {
       console.error('Failed to create emergency alert:', err)
@@ -112,10 +123,10 @@ export const useDiagnosisStore = defineStore('diagnosis', () => {
       )
 
       const querySnapshot = await getDocs(q)
-      diagnoses.value = querySnapshot.docs.map(doc => ({
+      diagnoses.value = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date()
+        createdAt: doc.data().createdAt?.toDate() || new Date(),
       })) as DiagnosisRecord[]
     } catch (err: any) {
       error.value = err.message || 'Failed to fetch diagnosis history'
@@ -125,7 +136,9 @@ export const useDiagnosisStore = defineStore('diagnosis', () => {
     }
   }
 
-  const createPatient = async (patientData: Omit<Patient, 'id' | 'ownerUid' | 'createdAt'>) => {
+  const createPatient = async (
+    patientData: Omit<Patient, 'id' | 'ownerUid' | 'createdAt'>
+  ) => {
     if (!authStore.user) throw new Error('User not authenticated')
 
     try {
@@ -135,17 +148,17 @@ export const useDiagnosisStore = defineStore('diagnosis', () => {
       const patient: Omit<Patient, 'id'> = {
         ...patientData,
         ownerUid: authStore.user.uid,
-        createdAt: new Date()
+        createdAt: new Date(),
       }
 
       const docRef = await addDoc(collection(db, 'patients'), {
         ...patient,
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
       })
 
       const savedPatient: Patient = {
         id: docRef.id,
-        ...patient
+        ...patient,
       }
 
       patients.value.unshift(savedPatient)
@@ -172,10 +185,10 @@ export const useDiagnosisStore = defineStore('diagnosis', () => {
       )
 
       const querySnapshot = await getDocs(q)
-      patients.value = querySnapshot.docs.map(doc => ({
+      patients.value = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date()
+        createdAt: doc.data().createdAt?.toDate() || new Date(),
       })) as Patient[]
     } catch (err: any) {
       error.value = err.message || 'Failed to fetch patients'
@@ -198,6 +211,6 @@ export const useDiagnosisStore = defineStore('diagnosis', () => {
     fetchDiagnosisHistory,
     createPatient,
     fetchPatients,
-    clearError
+    clearError,
   }
 })

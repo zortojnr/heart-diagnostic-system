@@ -1,18 +1,13 @@
 import { defineStore } from 'pinia'
 import { ref, computed, readonly } from 'vue'
-import { 
-  signInWithEmailAndPassword, 
+import {
+  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  type User as FirebaseUser
+  type User as FirebaseUser,
 } from 'firebase/auth'
-import { 
-  doc, 
-  getDoc, 
-  setDoc,
-  serverTimestamp 
-} from 'firebase/firestore'
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore'
 import type { User } from '../types'
 import { auth, db } from '../firebase'
 
@@ -38,7 +33,7 @@ export const useAuthStore = defineStore('auth', () => {
             email: firebaseUser.email!,
             displayName: firebaseUser.displayName || userData.displayName || '',
             role: userData.role || 'patient',
-            createdAt: userData.createdAt?.toDate() || new Date()
+            createdAt: userData.createdAt?.toDate() || new Date(),
           }
         } else {
           // Create user document if it doesn't exist
@@ -54,7 +49,7 @@ export const useAuthStore = defineStore('auth', () => {
             email: firebaseUser.email!,
             displayName: firebaseUser.displayName || '',
             role: 'patient',
-            createdAt: new Date()
+            createdAt: new Date(),
           }
         } else {
           error.value = 'Failed to load user data'
@@ -73,7 +68,7 @@ export const useAuthStore = defineStore('auth', () => {
         email: firebaseUser.email!,
         displayName: firebaseUser.displayName || '',
         role: 'patient',
-        createdAt: new Date()
+        createdAt: new Date(),
       }
 
       // Only save required fields to Firestore to match security rules
@@ -81,7 +76,7 @@ export const useAuthStore = defineStore('auth', () => {
         email: firebaseUser.email!,
         displayName: firebaseUser.displayName || '',
         role: 'patient',
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
       })
 
       user.value = userData
@@ -96,7 +91,7 @@ export const useAuthStore = defineStore('auth', () => {
       loading.value = true
       error.value = null
       await signInWithEmailAndPassword(auth, email, password)
-      
+
       // Wait for auth state to be properly set
       return new Promise<void>((resolve, reject) => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -108,7 +103,7 @@ export const useAuthStore = defineStore('auth', () => {
             reject(new Error('Authentication failed'))
           }
         })
-        
+
         // Timeout after 10 seconds
         setTimeout(() => {
           unsubscribe()
@@ -123,25 +118,34 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const register = async (email: string, password: string, displayName: string, role: 'patient' | 'doctor' = 'patient') => {
+  const register = async (
+    email: string,
+    password: string,
+    displayName: string,
+    role: 'patient' | 'doctor' = 'patient'
+  ) => {
     try {
       loading.value = true
       error.value = null
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-      
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      )
+
       // Update display name using dynamic import to avoid TypeScript issues
       if (displayName) {
         const { updateProfile } = await import('firebase/auth')
         await updateProfile(userCredential.user, { displayName })
       }
-      
+
       // Create user document with role
       await setDoc(doc(db, 'users', userCredential.user.uid), {
         uid: userCredential.user.uid,
         email: userCredential.user.email,
         displayName,
         role,
-        createdAt: serverTimestamp()
+        createdAt: serverTimestamp(),
       })
     } catch (err: any) {
       error.value = err.message || 'Registration failed'
@@ -168,7 +172,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       loading.value = true
       error.value = null
-      
+
       if (!user.value) {
         throw new Error('No user logged in')
       }
@@ -178,16 +182,20 @@ export const useAuthStore = defineStore('auth', () => {
       if (currentUser && displayName) {
         const { updateProfile } = await import('firebase/auth')
         await updateProfile(currentUser, { displayName })
-        
+
         // Update Firestore document
-        await setDoc(doc(db, 'users', currentUser.uid), {
-          displayName
-        }, { merge: true })
+        await setDoc(
+          doc(db, 'users', currentUser.uid),
+          {
+            displayName,
+          },
+          { merge: true }
+        )
 
         // Update local user state
         user.value = {
           ...user.value,
-          displayName
+          displayName,
         }
       }
     } catch (err: any) {
@@ -213,6 +221,6 @@ export const useAuthStore = defineStore('auth', () => {
     register,
     logout,
     updateProfile,
-    clearError
+    clearError,
   }
 })

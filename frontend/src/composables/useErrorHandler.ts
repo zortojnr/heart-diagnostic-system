@@ -25,23 +25,23 @@ export function useErrorHandler() {
     const appError: AppError = {
       ...error,
       id: `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      timestamp: new Date()
+      timestamp: new Date(),
     }
-    
+
     errors.value.push(appError)
-    
+
     // Auto-remove error after 10 seconds unless it's a critical error
     if (error.type !== 'server' && error.type !== 'auth') {
       setTimeout(() => {
         removeError(appError.id)
       }, 10000)
     }
-    
+
     return appError.id
   }
 
   const removeError = (errorId: string) => {
-    const index = errors.value.findIndex(error => error.id === errorId)
+    const index = errors.value.findIndex((error) => error.id === errorId)
     if (index > -1) {
       errors.value.splice(index, 1)
     }
@@ -72,7 +72,7 @@ export function useErrorHandler() {
 
   const handleApiError = (error: any, context?: string) => {
     console.error('API Error:', error, context)
-    
+
     let errorType: AppError['type'] = 'unknown'
     let message = 'An unexpected error occurred'
     let details = ''
@@ -98,7 +98,7 @@ export function useErrorHandler() {
             handler: () => {
               // This would trigger navigation to login
               window.location.href = '/login'
-            }
+            },
           }
           break
         case 403:
@@ -125,7 +125,7 @@ export function useErrorHandler() {
             handler: () => {
               // This would retry the failed request
               console.log('Retrying request...')
-            }
+            },
           }
           break
         case 500:
@@ -136,13 +136,14 @@ export function useErrorHandler() {
             label: 'Retry',
             handler: () => {
               window.location.reload()
-            }
+            },
           }
           break
         case 503:
           errorType = 'server'
           message = 'Service unavailable'
-          details = 'The service is temporarily unavailable. Please try again later.'
+          details =
+            'The service is temporarily unavailable. Please try again later.'
           break
         default:
           errorType = 'server'
@@ -158,7 +159,7 @@ export function useErrorHandler() {
         label: 'Retry',
         handler: () => {
           window.location.reload()
-        }
+        },
       }
     } else {
       // Other error
@@ -171,7 +172,7 @@ export function useErrorHandler() {
       type: errorType,
       message,
       details,
-      action
+      action,
     })
   }
 
@@ -179,7 +180,7 @@ export function useErrorHandler() {
     return addError({
       type: 'validation',
       message: `${field}: ${message}`,
-      details: 'Please correct the highlighted field and try again'
+      details: 'Please correct the highlighted field and try again',
     })
   }
 
@@ -192,8 +193,8 @@ export function useErrorHandler() {
         label: 'Retry',
         handler: () => {
           window.location.reload()
-        }
-      }
+        },
+      },
     })
   }
 
@@ -207,7 +208,7 @@ export function useErrorHandler() {
       if (loadingKey) {
         setLoading(loadingKey, true, loadingMessage)
       }
-      
+
       const result = await operation()
       return result
     } catch (error) {
@@ -224,21 +225,21 @@ export function useErrorHandler() {
     // State
     errors: errors.value,
     loadingStates,
-    
+
     // Error management
     addError,
     removeError,
     clearAllErrors,
-    
+
     // Loading management
     setLoading,
     isLoading,
     getLoadingMessage,
-    
+
     // Error handlers
     handleApiError,
     handleValidationError,
     handleNetworkError,
-    withErrorHandling
+    withErrorHandling,
   }
 }
