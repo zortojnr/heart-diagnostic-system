@@ -1,0 +1,334 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Frontend Build Output
+frontend/dist/
+frontend/dist-ssr/
+frontend/*.local
+
+# Backend Build Output
+backend/target/
+backend/build/
+backend/out/
+backend/*.jar
+backend/*.war
+backend/*.ear
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime Data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage Directory Used by Tools like Istanbul
+coverage/
+*.lcov
+
+# nyc Test Coverage
+.nyc_output/
+
+# Grunt Intermediate Storage
+.grunt/
+
+# Bower Dependency Directory
+bower_components/
+
+# node-waf Configuration
+.lock-wscript
+
+# Compiled Binary Addons
+build/Release/
+
+# Dependency Directories
+jspm_packages/
+
+# TypeScript Cache
+*.tsbuildinfo
+
+# Optional npm Cache Directory
+.npm/
+
+# Optional eslint Cache
+.eslintcache
+
+# Microbundle Cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL History
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity File
+.yarn-integrity
+
+# parcel-bundler Cache
+.cache/
+.parcel-cache/
+
+# Next.js Build Output
+.next/
+
+# Nuxt.js Build / Generate Output
+.nuxt/
+dist/
+
+# Gatsby Files
+.cache/
+public/
+
+# Storybook Build Outputs
+.out/
+.storybook-out/
+
+# Rollup.js Default Build Output
+dist/
+
+# Serverless Directories
+.serverless/
+
+# FuseBox Cache
+.fusebox/
+
+# DynamoDB Local Files
+.dynamodb/
+
+# TernJS Port File
+.tern-port
+
+# Java Specific
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# Eclipse
+.apt_generated/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+# Docker
+.dockerignore
+
+# Machine Learning Models (if large)
+*.model
+*.pkl
+*.joblib
+ml-models/datasets/*.csv
+ml-models/datasets/*.arff
+ml-models/temp/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Temporary Files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Backup Files
+*.bak
+*.backup
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+
+# SSL Certificates
+*.pem
+*.key
+*.crt
+*.csr
+
+# Monitoring and Metrics
+prometheus_data/
+grafana_data/
+
+# Redis Data
+redis_data/
+
+# Application Specific
+uploads/
+downloads/
+cache/
+sessions/
+
+# Test Results
+test-results/
+coverage/
+*.lcov
+junit.xml
+
+# Deployment
+deploy/
+deployment/
+k8s/secrets/
+
+# Local Configuration
+config/local.json
+config/development.json
+config/production.json
+
+# Secrets and Keys
+secrets/
+keys/
+*.secret
+*.private
+
+# Compiled CSS (if using preprocessors)
+*.css.map
+
+# Webpack Bundle Analyzer
+bundle-analyzer-report.html
+
+# Storybook
+storybook-static/
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Jest
+jest_html_reporters.html
+
+# ESLint
+.eslintcache
+
+# Prettier
+.prettierignore
+
+# Husky
+.husky/_/
+
+# Commitizen
+.cz-config.js
+
+# Local History
+.history/
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*

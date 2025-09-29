@@ -1,0 +1,32 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid",
+        ".validate": "newData.hasChildren(['role', 'email', 'createdAt'])"
+      }
+    },
+    "patients": {
+      "$patientId": {
+        ".read": "auth != null && (resource.data.ownerUid == auth.uid || root.child('users').child(auth.uid).child('role').val() == 'admin')",
+        ".write": "auth != null && (resource.data.ownerUid == auth.uid || root.child('users').child(auth.uid).child('role').val() == 'admin')",
+        ".validate": "newData.hasChildren(['ownerUid', 'name', 'age', 'gender', 'height', 'weight', 'bmi', 'createdAt'])"
+      }
+    },
+    "diagnoses": {
+      "$diagnosisId": {
+        ".read": "auth != null && (resource.data.performedBy == auth.uid || root.child('users').child(auth.uid).child('role').val() == 'admin')",
+        ".write": "auth != null && (resource.data.performedBy == auth.uid || root.child('users').child(auth.uid).child('role').val() == 'admin')",
+        ".validate": "newData.hasChildren(['patientId', 'inputPayload', 'modelResult', 'performedBy', 'createdAt'])"
+      }
+    },
+    "emergencies": {
+      "$emergencyId": {
+        ".read": "auth != null && (root.child('users').child(auth.uid).child('role').val() == 'admin' || root.child('users').child(auth.uid).child('role').val() == 'doctor')",
+        ".write": "auth != null && (root.child('users').child(auth.uid).child('role').val() == 'admin' || root.child('users').child(auth.uid).child('role').val() == 'doctor')",
+        ".validate": "newData.hasChildren(['patientId', 'diagnosisId', 'severity', 'timestamp'])"
+      }
+    }
+  }
+}

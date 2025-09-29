@@ -1,0 +1,50 @@
+{
+  "name": "heart-diagnostic-system",
+  "version": "1.0.0",
+  "description": "AI-powered heart disease diagnostic system with Vue.js frontend and Spring Boot backend",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && ./mvnw spring-boot:run",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && ./mvnw clean package -DskipTests",
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:frontend": "cd frontend && npm run test",
+    "test:backend": "cd backend && ./mvnw test",
+    "lint": "cd frontend && npm run lint",
+    "preview": "cd frontend && npm run preview",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && ./mvnw dependency:resolve",
+    "clean": "cd frontend && rm -rf dist node_modules && cd ../backend && ./mvnw clean",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "deploy:prod": "npm run build && docker-compose -f docker-compose.prod.yml up -d"
+  },
+  "keywords": [
+    "heart-disease",
+    "medical-diagnosis",
+    "machine-learning",
+    "vue",
+    "spring-boot",
+    "healthcare",
+    "ai"
+  ],
+  "author": "Heart Diagnostic Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/heart-diagnostic-system.git"
+  },
+  "workspaces": [
+    "frontend"
+  ]
+}
